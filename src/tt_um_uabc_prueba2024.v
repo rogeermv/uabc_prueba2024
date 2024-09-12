@@ -53,6 +53,18 @@ module tt_um_uabc_prueba2024 (
         endcase
     end
 
+    // Instanciar el módulo tt_um_uabc_prueba2024
+  tt_um_uabc_prueba2024 uut (
+    .ui_in  (8'b0),         // Puedes conectar esto a otra señal si lo necesitas
+    .uo_out (uo_out),       // Conecta la salida de letras en binario al módulo original
+    .uio_in (8'b0),         // Puedes conectar esto a otra señal si lo necesitas
+    .uio_out(),             // No necesitas usar esto
+    .uio_oe(),              // No necesitas usar esto
+    .ena    (1'b1),         // Suponiendo que el módulo original está siempre habilitado
+    .clk    (clk),
+    .rst_n  (rst_n)
+  );
+
   // List all unused inputs to prevent warnings
   wire _unused = &{ena, 1'b0};
 
