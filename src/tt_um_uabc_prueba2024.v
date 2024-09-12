@@ -16,12 +16,44 @@ module tt_um_uabc_prueba2024 (
     input  wire       rst_n     // reset_n - low to reset
 );
 
-  // All output pins must be assigned. If not used, assign to 0.
-  assign uo_out  = ui_in + uio_in;  // Example: ou_out is the sum of ui_in and uio_in
-  assign uio_out = 0;
-  assign uio_oe  = 0;
+    reg [24:0] counter;           // 25-bit counter to create 1 second delay
+    reg [3:0]  display_value;     // Value to display
+
+    // Contador de segundos
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n)
+            counter <= 0;
+    else if (counter == 25_000_000) begin
+        counter <= 0;               // Reset counter every second
+        display_value <= display_value + 1; // Increment display value
+    end else
+        counter <= counter + 1;
+    end
+
+     // Asignar letras en binario al uo_out
+    always @(*) begin
+        case (display_value)
+            4'd0: uo_out = 8'b01000001; // A (binario)
+            4'd1: uo_out = 8'b01000010; // B (binario)
+            4'd2: uo_out = 8'b01000011; // C (binario)
+            4'd3: uo_out = 8'b01000100; // D (binario)
+            4'd4: uo_out = 8'b01000101; // E (binario)
+            4'd5: uo_out = 8'b01000110; // F (binario)
+            4'd6: uo_out = 8'b00110000; // 0 (binario)
+            4'd7: uo_out = 8'b00110001; // 1 (binario)
+            4'd8: uo_out = 8'b00110010; // 2 (binario)
+            4'd9: uo_out = 8'b00110011; // 3 (binario)
+            4'd10: uo_out = 8'b00110100; // 4 (binario)
+            4'd11: uo_out = 8'b00110101; // 5 (binario)
+            4'd12: uo_out = 8'b00110110; // 6 (binario)
+            4'd13: uo_out = 8'b00110111; // 7 (binario)
+            4'd14: uo_out = 8'b00111000; // 8 (binario)
+            4'd15: uo_out = 8'b00111001; // 9 (binario)
+            default: uo_out = 8'b00000000; // Blank (off)
+        endcase
+    end
 
   // List all unused inputs to prevent warnings
-  wire _unused = &{ena, clk, rst_n, 1'b0};
+  wire _unused = &{ena, 1'b0};
 
 endmodule
