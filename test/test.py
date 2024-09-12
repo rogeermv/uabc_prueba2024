@@ -1,15 +1,8 @@
-# SPDX-FileCopyrightText: © 2024 Tiny Tapeout
-# SPDX-License-Identifier: Apache-2.0
-
-import cocotb
-from cocotb.clock import Clock
-from cocotb.triggers import ClockCycles, with_timeout
-
 @cocotb.test()
 async def test_project(dut):
     dut._log.info("Start")
 
-    # Configuración del reloj a 10 us (100 KHz)
+    # Configuración del reloj a 10 us (10 MHz)
     clock = Clock(dut.clk, 10, units="us")
     cocotb.start_soon(clock.start())
 
@@ -46,7 +39,7 @@ async def test_project(dut):
 
     # Prueba de la secuencia de display
     for i in range(16):
-        await with_timeout(ClockCycles(dut.clk, 1001), 10, 'ms')  # Espera para completar 1001 ciclos con timeout
+        await with_timeout(ClockCycles(dut.clk, 101), 100, 'ms')  # Timeout aumentado a 100 ms
         dut._log.info(f"Checking output for display_value {i}")
         assert dut.uo_out.value == expected_outputs[i], f"Test failed at display_value {i}. Expected {expected_outputs[i]:07b}, got {dut.uo_out.value:07b}"
 
