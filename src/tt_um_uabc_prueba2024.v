@@ -16,9 +16,10 @@ module tt_um_uabc_prueba2024 (
     input  wire       rst_n     // reset_n - low to reset
 );
     
-  reg [24:0] counter;          // 25-bit counter to create 1-second delay
+    reg [24:0] counter;          // 25-bit counter to create 1-second delay
   reg [3:0]  display_value;    // Value to display
-  
+  reg [6:0]  segment_reg;      // Register to store the current segment value
+
   // Counter for 1-second delay
   always @(posedge clk or negedge rst_n) begin
     if (!rst_n) begin
@@ -35,33 +36,31 @@ module tt_um_uabc_prueba2024 (
   // Assign letters and numbers in binary to uo_out
   always @(*) begin
     case (display_value)
-      4'd0: uo_out = 8'b01000001; // A (binary)
-      4'd1: uo_out = 8'b01000010; // B (binary)
-      4'd2: uo_out = 8'b01000011; // C (binary)
-      4'd3: uo_out = 8'b01000100; // D (binary)
-      4'd4: uo_out = 8'b01000101; // E (binary)
-      4'd5: uo_out = 8'b01000110; // F (binary)
-      4'd6: uo_out = 8'b00110000; // 0 (binary)
-      4'd7: uo_out = 8'b00110001; // 1 (binary)
-      4'd8: uo_out = 8'b00110010; // 2 (binary)
-      4'd9: uo_out = 8'b00110011; // 3 (binary)
-      4'd10: uo_out = 8'b00110100; // 4 (binary)
-      4'd11: uo_out = 8'b00110101; // 5 (binary)
-      4'd12: uo_out = 8'b00110110; // 6 (binary)
-      4'd13: uo_out = 8'b00110111; // 7 (binary)
-      4'd14: uo_out = 8'b00111000; // 8 (binary)
-      4'd15: uo_out = 8'b00111001; // 9 (binary)
-      default: uo_out = 8'b00000000; // Blank (off)
+      4'd0: segment_reg = 7'b0111111; // A
+      4'd1: segment_reg = 7'b0000110; // b
+      4'd2: segment_reg = 7'b1011011; // C
+      4'd3: segment_reg = 7'b1001111; // d
+      4'd4: segment_reg = 7'b1100110; // E
+      4'd5: segment_reg = 7'b1101101; // F
+      4'd6: segment_reg = 7'b1111101; // G
+      4'd7: segment_reg = 7'b0000111; // H
+      4'd8: segment_reg = 7'b1111111; // I
+      4'd9: segment_reg = 7'b1101111; // J
+      4'd10: segment_reg = 7'b1011110; // K
+      4'd11: segment_reg = 7'b0111001; // L
+      4'd12: segment_reg = 7'b1110110; // M
+      4'd13: segment_reg = 7'b1011110; // N
+      4'd14: segment_reg = 7'b1111011; // O
+      4'd15: segment_reg = 7'b1111110; // P
+      default: segment_reg = 7'b0000000; // Blank (off)
     endcase
   end
 
-    
-  // Assignments for unused outputs
+  assign uo_out = segment_reg; // Output segment data to display
   assign uio_out = 0; // Ensure that unused IO outputs are zero
   assign uio_oe = 8'hFF; // Enable all IOs for output
 
-
   // List all unused inputs to prevent warnings
-  wire _unused = &{ena, clk, rst_n, 1'b0};
+  //wire _unused = &{ena, clk, rst_n, 1'b0};
 
 endmodule
