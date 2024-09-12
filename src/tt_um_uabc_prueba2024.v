@@ -65,7 +65,4 @@ module tt_um_uabc_prueba2024 (
     .rst_n  (rst_n)
   );
 
-  // List all unused inputs to prevent warnings
-  wire _unused = &{ena, 1'b0};
-
 endmodule
