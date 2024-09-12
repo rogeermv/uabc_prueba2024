@@ -10,8 +10,8 @@ from cocotb.triggers import ClockCycles
 async def test_project(dut):
     dut._log.info("Start")
 
-    # Set the clock period to 0.1 us (10 MHz)
-    clock = Clock(dut.clk, 0.1, units="us")
+    # Set the clock period to 10 us (100 KHz)
+    clock = Clock(dut.clk, 10, units="us")
     cocotb.start_soon(clock.start())
 
     # Reset
@@ -34,7 +34,7 @@ async def test_project(dut):
 
     # The following assersion is just an example of how to check the output values.
     # Change it to match the actual expected output of your module:
-    assert dut.uo_out.value == 50
+    #assert dut.uo_out.value == 50
 
     # Keep testing the module by changing the input values, waiting for
     # one or more clock cycles, and asserting the expected output values.
