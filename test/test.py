@@ -3,13 +3,13 @@
 
 import cocotb
 from cocotb.clock import Clock
-from cocotb.triggers import ClockCycles
+from cocotb.triggers import ClockCycles, with_timeout
 
 @cocotb.test()
 async def test_project(dut):
     dut._log.info("Start")
 
-    # Set the clock period to 10 us (100 KHz)
+    # Configuración del reloj a 10 us (100 KHz)
     clock = Clock(dut.clk, 10, units="us")
     cocotb.start_soon(clock.start())
 
@@ -24,7 +24,7 @@ async def test_project(dut):
 
     dut._log.info("Test project behavior")
 
-    # Expected segment values corresponding to display_value from 0 to 15
+    # Valores esperados para display_value de 0 a 15
     expected_outputs = [
         0b0111111, # A
         0b0000110, # b
@@ -44,9 +44,9 @@ async def test_project(dut):
         0b1111110, # P
     ]
 
-    # Test the display sequence
+    # Prueba de la secuencia de display
     for i in range(16):
-        await ClockCycles(dut.clk, 25_000_001)  # Wait for the counter to complete 1 second
+        await with_timeout(ClockCycles(dut.clk, 1001), 10, 'ms')  # Espera para completar 1001 ciclos con timeout
         dut._log.info(f"Checking output for display_value {i}")
         assert dut.uo_out.value == expected_outputs[i], f"Test failed at display_value {i}. Expected {expected_outputs[i]:07b}, got {dut.uo_out.value:07b}"
 
